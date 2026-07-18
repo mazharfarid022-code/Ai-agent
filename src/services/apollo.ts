@@ -19,7 +19,7 @@ export async function generateRealLeads(filters: {
 
   const people = data.people || data.contacts || [];
 
-  return people.map((person: any, index: number) => ({
+  return people.map((person: any) => ({
     id: crypto.randomUUID(),
     name: person.name || `${person.first_name || ""} ${person.last_name || ""}`.trim(),
     company: person.organization?.name || "",
