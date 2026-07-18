@@ -12,7 +12,8 @@ export async function generateRealLeads(filters: {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch leads");
+  const err = await response.text();
+  throw new Error(err);
   }
 
   const data = await response.json();
