@@ -77,8 +77,8 @@ function App() {
   if (view === 'landing') handleNavigate('dashboard');
 } catch (e) {
   setIsGenerating(false);
-  toast.error("Failed to generate leads");
-}
+  toast.error(e instanceof Error ? e.message : "Failed to generate leads");
+  }
   }, [refreshLeads, view, handleNavigate]);
 
   const handleAICommand = useCallback(async (command: string) => {
