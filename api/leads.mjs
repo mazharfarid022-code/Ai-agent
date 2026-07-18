@@ -3,46 +3,37 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const apiKey = process.env.APOLLO_API_KEY;
+  const FIRECRAWL_API_KEY = process.env.FIRECRAWL_API_KEY;
 
-  if (!apiKey) {
+  if (!FIRECRAWL_API_KEY) {
     return res.status(500).json({
-      error: "APOLLO_API_KEY is missing",
+      error: "FIRECRAWL_API_KEY is missing",
     });
   }
 
   try {
-    const { count = 25, industry = "", source = "" } = req.body || {};
+    const { source = "virtual assistant companies", count = 10 } = req.body || {};
 
-    const response = await fetch(
-      "https://api.apollo.io/api/v1/mixed_people/search",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Api-Key": apiKey,
-        },
-        body: JSON.stringify({
-          page: 1,
-          per_page: count,
-          q_keywords: source,
-          q_organization_keyword_tags: industry ? [industry] : [],
-        }),
-      }
-    );
+    const response = await fetch("https://api.firecrawl.dev/v2/search", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${FIRECRAWL_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        query: source,
+        limit: count,
+        sources: ["web"]
+      })
+    });
 
     const data = await response.json();
 
-    if (!response.ok) {
-      return res.status(response.status).json(data);
-    }
-
     return res.status(200).json(data);
-  } catch (error) {
-    console.error(error);
 
+  } catch (error) {
     return res.status(500).json({
-      error: error.message,
+      error: error.message
     });
   }
 }
