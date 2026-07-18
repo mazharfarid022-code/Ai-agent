@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { Lead, LeadFilter, AppSettings, DashboardStats } from '@/types/lead';
 import { getLeads, saveLeads, deleteLead, getSettings, saveSettings } from '@/utils/storage';
-import { generateMockLeads } from '@/utils/mockData';
 import { exportToCSV, downloadCSV } from '@/utils/storage';
 import { generateOutreachMessage, generateAICommandLeads } from '@/utils/aiService';
 import LandingPage from '@/sections/LandingPage';
@@ -92,7 +91,7 @@ function App() {
   source: filters.source,
   industry: filters.industry,
 });
-      const filtered = newLeads.map((l) => {
+      const filtered = newLeads.map((l: Lead) => {
         if (filters.industry) l.industry = filters.industry;
         return l;
       });
